@@ -11,17 +11,16 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = 4000;
 
 connectDB();
 connectCloudinary();
 
 app.use(express.json());
+
 const allowedOrigins = [
   "https://admin-seven-coral.vercel.app",
   "https://user-six-bay.vercel.app",
-  "http://localhost:5175",
-  "http://localhost:5176",
   "http://localhost:5173",
 ];
 app.use(
@@ -39,10 +38,10 @@ app.use(
   })
 );
 
-app.use("/api/user", userRouter);
-app.use("/api/product", productRouter);
-app.use("/api/cart", cartRouter);
-app.use("/api/order", orderRouter);
+app.use("/user", userRouter);
+app.use("/product", productRouter);
+app.use("/cart", cartRouter);
+app.use("/order", orderRouter);
 
 app.get("/", (req, res) => res.send("API Working"));
 
