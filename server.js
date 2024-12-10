@@ -22,8 +22,7 @@ connectCloudinary();
 app.use(express.json());
 
 const allowedOrigins = [
-  // "https://admin-seven-coral.vercel.app",
-  // "https://user-six-bay.vercel.app",
+  "https://jsd-8-raptor-trooper-website.vercel.app/",
   "http://localhost:5173",
 ];
 app.use(
