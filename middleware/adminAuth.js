@@ -20,7 +20,7 @@ const adminAuth = async (req, res, next) => {
         message: "Unauthorized: User not found"
       })
     }
-    if (user.role !== "admin") {
+    if (user.role !== "admin" && decode.role === "admin") {
       return res.json({
         success: false,
         message: "Unauthorized: User is not an Admin"
