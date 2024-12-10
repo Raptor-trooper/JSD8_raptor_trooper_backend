@@ -3,12 +3,12 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET);
+const createToken = (id, role) => {
+  return jwt.sign({ userId: id, role }, process.env.JWT_SECRET);
 };
 
 // Route for user login
-const loginUser = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email });
@@ -17,8 +17,8 @@ const loginUser = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      const token = createToken(user._id);
-      res.json({ success: true, token });
+      const token = createToken(user._id, user.role);
+      res.json({ success: true, role: user.role, token });
     } else {
       res.json({ success: false, message: "Invalid credentials" });
     }
@@ -29,7 +29,7 @@ const loginUser = async (req, res) => {
 };
 
 // Route for user register
-const registerUser = async (req, res) => {
+const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     // checking user already exists or not
@@ -58,32 +58,14 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    const user = await newUser.save();
-    const token = createToken(user._id);
-    res.json({ success: true, token });
+
+    await newUser.save();
+    // const token = createToken(user._id);
+    res.json({ success: true, newUser });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
 };
 
-// Route for admin login
-const adminLogin = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (
-      email === process.env.ADMIN_EMAIL &&
-      password === process.env.ADMIN_PASSWORD
-    ) {
-      const token = jwt.sign(email + password, process.env.JWT_SECRET);
-      res.json({ success: true, token });
-    } else {
-      res.json({ success: false, message: "Invalid credentials" });
-    }
-  } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
-  }
-};
-
-export { loginUser, registerUser, adminLogin };
+export { login, register };

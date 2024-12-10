@@ -3,27 +3,30 @@ import userModel from "../models/userModel.js";
 
 const adminAuth = async (req, res, next) => {
   try {
-    const { token, role } = req.headers;
+    const authHeader = req.headers['Authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
       return res.json({
         success: false,
-        message: "Not Authorized Login Again",
+        message: "Not Authorized: No token provided",
       });
     }
-
-    // const token_decode = jwt.verify(token, process.env.JWT_SECRET);
-    // if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
-    //   return res.json({
-    //     success: false,
-    //     message: "Not Authorized Login Again",
-    //   });
-    // }
-
-    if (role !== "admin") {
-      return res.status(403).json({ message: "You are not admin" });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userModel.findById(decoded.userId);
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "Unauthorized: User not found"
+      })
     }
-
+    if (user.role !== "admin" && decode.role === "admin") {
+      return res.json({
+        success: false,
+        message: "Unauthorized: User is not an Admin"
+      })
+    }
+    req.user = user;
     next();
   } catch (err) {
     console.log(err);
