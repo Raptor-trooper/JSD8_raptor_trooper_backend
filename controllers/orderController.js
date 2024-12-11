@@ -13,7 +13,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const placeOrderStripe = async (req, res) => {
   try {
     const { userId, items, amount, address } = req.body;
-    const { origin } = req.headers;
+    const url = "http://localhost:5173";
 
     const line_items = items.map((item) => ({
       price_data: {
@@ -39,8 +39,8 @@ const placeOrderStripe = async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       line_items,
-      success_url: `${origin}/verify?success=true&orderId=${newOrder._id}`,
-      cancel_url: `${origin}/verify?success=false&orderId=${newOrder._id}`,
+      success_url: `${url}/verify?success=true`,
+      cancel_url: `${url}/verify?success=false`,
       mode: "payment",
     });
 
@@ -49,6 +49,7 @@ const placeOrderStripe = async (req, res) => {
       items,
       address,
       amount,
+      status: session.status,
       paymentMethod: "Stripe",
       payment: false,
       date: Date.now(),
@@ -57,7 +58,12 @@ const placeOrderStripe = async (req, res) => {
     const newOrder = new orderModel(orderData);
     await newOrder.save()
 
-    res.json({ success: true, session_url: session.url });
+    // res.redirect(303, session.url);
+    res.json({
+      success: true,
+      session_url: session.url,
+      orderId: newOrder._id,
+    });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
