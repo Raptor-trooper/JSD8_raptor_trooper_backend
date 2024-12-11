@@ -13,7 +13,7 @@ const authUser = async (req, res, next) => {
       });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await userModel.findById(decoded.user._id);
+    const user = await userModel.findById(decoded.userId);
     if (!user) {
       return res.json({
         success: false,

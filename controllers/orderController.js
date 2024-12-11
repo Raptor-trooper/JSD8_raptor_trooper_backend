@@ -15,18 +15,18 @@ const placeOrderStripe = async (req, res) => {
     const { userId, items, amount, address } = req.body;
     const { origin } = req.headers;
 
-    const orderData = {
-      userId,
-      items,
-      address,
-      amount,
-      paymentMethod: "Stripe",
-      payment: false,
-      date: Date.now(),
-    };
+    // const orderData = {
+    //   userId,
+    //   items,
+    //   address,
+    //   amount,
+    //   paymentMethod: "Stripe",
+    //   payment: false,
+    //   date: Date.now(),
+    // };
 
-    const newOrder = new orderModel(orderData);
-    await newOrder.save();
+    // const newOrder = new orderModel(orderData);
+    // await newOrder.save();
 
     const line_items = items.map((item) => ({
       price_data: {
@@ -51,11 +51,24 @@ const placeOrderStripe = async (req, res) => {
     });
 
     const session = await stripe.checkout.sessions.create({
+      line_items,
       success_url: `${origin}/verify?success=true&orderId=${newOrder._id}`,
       cancel_url: `${origin}/verify?success=false&orderId=${newOrder._id}`,
-      line_items,
       mode: "payment",
     });
+
+    const orderData = {
+      userId,
+      items,
+      address,
+      amount,
+      paymentMethod: "Stripe",
+      payment: false,
+      date: Date.now(),
+    }
+
+    const newOrder = new orderModel(orderData);
+    await newOrder.save()
 
     res.json({ success: true, session_url: session.url });
   } catch (error) {
