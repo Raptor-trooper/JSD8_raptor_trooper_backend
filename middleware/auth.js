@@ -20,7 +20,7 @@ const authUser = async (req, res, next) => {
         message : "Unauthorized: User not found"
       });
     }
-    req.user = user;
+    req.body.userId = decoded.userId;
     next();
   } catch (error) {
     console.log(error);

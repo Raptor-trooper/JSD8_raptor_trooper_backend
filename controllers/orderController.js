@@ -15,19 +15,6 @@ const placeOrderStripe = async (req, res) => {
     const { userId, items, amount, address } = req.body;
     const { origin } = req.headers;
 
-    // const orderData = {
-    //   userId,
-    //   items,
-    //   address,
-    //   amount,
-    //   paymentMethod: "Stripe",
-    //   payment: false,
-    //   date: Date.now(),
-    // };
-
-    // const newOrder = new orderModel(orderData);
-    // await newOrder.save();
-
     const line_items = items.map((item) => ({
       price_data: {
         currency: currency,
