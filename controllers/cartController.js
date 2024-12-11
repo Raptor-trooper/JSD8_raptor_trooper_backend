@@ -28,16 +28,33 @@ const addToCart = async (req, res) => {
 };
 
 // update user cart
+// const updateCart = async (req, res) => {
+//   try {
+//     const { userId, itemId, quantity } = req.body;
+
+//     const userData = await userModel.findById(userId);
+//     let cartData = await userData.cartData;
+
+//     cartData[itemId] = quantity;
+
+//     await userModel.findByIdAndUpdate(userId, { cartData });
+//     res.json({ success: true, message: "Cart Updated" });
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ success: false, message: error.message });
+//   }
+// };
+
 const updateCart = async (req, res) => {
   try {
     const { userId, itemId, quantity } = req.body;
 
     const userData = await userModel.findById(userId);
-    let cartData = await userData.cartData;
+    // let cartData = await userData.cartData;
 
-    cartData[itemId] = quantity;
+    // cartData[itemId] = quantity;
 
-    await userModel.findByIdAndUpdate(userId, { cartData });
+    await userModel.findByIdAndUpdate(userId, { cartData: quantity });
     res.json({ success: true, message: "Cart Updated" });
   } catch (error) {
     console.log(error);
