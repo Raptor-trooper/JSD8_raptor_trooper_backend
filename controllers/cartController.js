@@ -6,9 +6,8 @@ const addToCart = async (req, res) => {
     const { userId, itemId } = req.body;
 
     const userData = await userModel.findById(userId);
-    let cartData = await userData.cartData; // ตรวจสอบว่า cartData มีอยู่หรือไม่
+    let cartData = await userData.cartData;
 
-    // เพิ่มหรืออัปเดตจำนวนสินค้าใน cart
     if (cartData[itemId]) {
       if (cartData[itemId]) {
         cartData[itemId] += 1;
@@ -20,9 +19,7 @@ const addToCart = async (req, res) => {
       cartData[itemId] = 1;
     }
 
-    // บันทึก cartData
     await userModel.findByIdAndUpdate(userId, { cartData });
-
     res.json({ success: true, message: "Added To Cart" });
   } catch (error) {
     console.log(error);
@@ -31,16 +28,33 @@ const addToCart = async (req, res) => {
 };
 
 // update user cart
+// const updateCart = async (req, res) => {
+//   try {
+//     const { userId, itemId, quantity } = req.body;
+
+//     const userData = await userModel.findById(userId);
+//     let cartData = await userData.cartData;
+
+//     cartData[itemId] = quantity;
+
+//     await userModel.findByIdAndUpdate(userId, { cartData });
+//     res.json({ success: true, message: "Cart Updated" });
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ success: false, message: error.message });
+//   }
+// };
+
 const updateCart = async (req, res) => {
   try {
     const { userId, itemId, quantity } = req.body;
 
     const userData = await userModel.findById(userId);
-    let cartData = await userData.cartData;
+    // let cartData = await userData.cartData;
 
-    cartData[itemId] = quantity;
+    // cartData[itemId] = quantity;
 
-    await userModel.findByIdAndUpdate(userId, { cartData });
+    await userModel.findByIdAndUpdate(userId, { cartData: quantity });
     res.json({ success: true, message: "Cart Updated" });
   } catch (error) {
     console.log(error);
