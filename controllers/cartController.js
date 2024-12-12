@@ -6,8 +6,9 @@ const addToCart = async (req, res) => {
     const { userId, itemId } = req.body;
 
     const userData = await userModel.findById(userId);
-    let cartData = await userData.cartData;
+    let cartData = await userData.cartData; // ตรวจสอบว่า cartData มีอยู่หรือไม่
 
+    // เพิ่มหรืออัปเดตจำนวนสินค้าใน cart
     if (cartData[itemId]) {
       if (cartData[itemId]) {
         cartData[itemId] += 1;
@@ -19,6 +20,7 @@ const addToCart = async (req, res) => {
       cartData[itemId] = 1;
     }
 
+    // บันทึก cartData
     await userModel.findByIdAndUpdate(userId, { cartData });
 
     res.json({ success: true, message: "Added To Cart" });
