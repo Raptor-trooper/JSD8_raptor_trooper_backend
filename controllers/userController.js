@@ -68,4 +68,18 @@ const register = async (req, res) => {
   }
 };
 
+// Route for user profile
+// const profile = async (req, res) => {
+//   try {
+//     const { userId, address } = req.body;
+//     const user = await userModel.findByIdAndUpdate({ userId });
+
+//     const userData = {
+//       address,
+//     }
+//     await userModel.save(userData);
+//   } catch (error) {
+    
+//   }
+// }
 export { login, register };
