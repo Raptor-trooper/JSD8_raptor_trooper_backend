@@ -69,17 +69,35 @@ const register = async (req, res) => {
 };
 
 // Route for user profile
-// const profile = async (req, res) => {
-//   try {
-//     const { userId, address } = req.body;
-//     const user = await userModel.findByIdAndUpdate({ userId });
+const getProfile = async (req, res) => {
+  try {
+    const { userId, address } = req.body;
 
-//     const userData = {
-//       address,
-//     }
-//     await userModel.save(userData);
-//   } catch (error) {
-    
-//   }
-// }
-export { login, register };
+    await userModel.findByIdAndUpdate(userId, { address });
+    res.json({
+      success: true,
+      message: "Cart Updated",
+      address
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+const updateProfile = async (req, res) => {
+  try {
+    const { userId, address } = req.body;
+
+    await userModel.findByIdAndUpdate(userId, { address });
+    res.json({
+      success: true,
+      message: "Cart Updated",
+      address
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+export { login, register, getProfile, updateProfile };
