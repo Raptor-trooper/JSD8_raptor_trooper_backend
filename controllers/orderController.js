@@ -12,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // Placing orders using Stripe Method
 const placeOrderStripe = async (req, res) => {
   try {
-    const { userId, items, amount, address } = req.body;
+    const { userId, items, amount, delivery } = req.body;
     const url = "http://localhost:5173";
 
     const line_items = items.map((item) => ({
@@ -47,16 +47,16 @@ const placeOrderStripe = async (req, res) => {
     const orderData = {
       userId,
       items,
-      address,
+      delivery,
       amount,
       status: session.status,
       paymentMethod: "Stripe",
       payment: false,
       date: Date.now(),
-    }
+    };
 
     const newOrder = new orderModel(orderData);
-    await newOrder.save()
+    await newOrder.save();
 
     // res.redirect(303, session.url);
     res.json({
