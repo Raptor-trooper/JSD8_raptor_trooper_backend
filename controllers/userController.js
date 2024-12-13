@@ -78,13 +78,13 @@ const getProfile = async (req, res) => {
         id: req.body.UserId,
         name: user.name,
         email: user.email,
-        delivery: user.delivery
+        delivery: user.delivery,
 
         // : {
-          //   firstName: user.delivery.firstName,
-          //   lastName: user.delivery.lastName,
-          //   country: user.delivery.country,
-          //   address: user.delivery.address,
+        //   firstName: user.delivery.firstName,
+        //   lastName: user.delivery.lastName,
+        //   country: user.delivery.country,
+        //   address: user.delivery.address,
         //   zip: user.delivery.zip,
         //   phone: user.delivery.phone,
         // }
@@ -95,7 +95,7 @@ const getProfile = async (req, res) => {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
-}
+};
 // Route for update user profile
 const updateProfile = async (req, res) => {
   try {
@@ -104,12 +104,12 @@ const updateProfile = async (req, res) => {
     await userModel.findByIdAndUpdate(userId, { delivery });
     res.json({
       success: true,
-      message: "Cart Updated",
-      delivery
+      message: "User Delivey is Updated",
+      delivery,
     });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
-}
+};
 export { login, register, getProfile, updateProfile };
