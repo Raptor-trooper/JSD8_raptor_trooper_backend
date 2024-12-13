@@ -3,9 +3,8 @@ import userModel from "../models/userModel.js";
 
 const adminAuth = async (req, res, next) => {
   try {
-    const authHeader = req.headers['Authorization'];
+    const authHeader = req.headers['Authorization'] || req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-
     if (!token) {
       return res.json({
         success: false,
@@ -20,13 +19,13 @@ const adminAuth = async (req, res, next) => {
         message: "Unauthorized: User not found"
       })
     }
-    if (user.role !== "admin" && decode.role === "admin") {
+    if (user.role !== "admin" && decoded.role !== "admin") {
       return res.json({
         success: false,
         message: "Unauthorized: User is not an Admin"
       })
     }
-    req.user = user;
+    req.body.userId = decoded.userId;
     next();
   } catch (err) {
     console.log(err);
