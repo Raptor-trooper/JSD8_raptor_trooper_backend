@@ -101,7 +101,7 @@ const updateProfile = async (req, res) => {
   try {
     const { userId, delivery } = req.body;
 
-    await userModel.findByIdAndUpdate(userId, { address });
+    await userModel.findByIdAndUpdate(userId, { delivery });
     res.json({
       success: true,
       message: "Cart Updated",
