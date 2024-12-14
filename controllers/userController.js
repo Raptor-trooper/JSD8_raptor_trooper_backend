@@ -71,26 +71,16 @@ const register = async (req, res) => {
 // Route for get user profile
 const getProfile = async (req, res) => {
   try {
-    const user = await userModel.findOne(req.body.UserId);
+    const user = await userModel.findById(req.body.userId);
     res.json({
       success: true,
       user: {
-        id: req.body.UserId,
+        id: req.body.userId,
         name: user.name,
         email: user.email,
         delivery: user.delivery,
-
-        // : {
-        //   firstName: user.delivery.firstName,
-        //   lastName: user.delivery.lastName,
-        //   country: user.delivery.country,
-        //   address: user.delivery.address,
-        //   zip: user.delivery.zip,
-        //   phone: user.delivery.phone,
-        // }
       },
     });
-    console.log(user);
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
