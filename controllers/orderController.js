@@ -13,7 +13,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const placeOrderStripe = async (req, res) => {
   try {
     const { userId, items, amount, delivery } = req.body;
-    const url = "http://localhost:5173";
+    const url = "https://jsd-8-raptor-trooper-website.vercel.app";
 
     const line_items = items.map((item) => ({
       price_data: {
@@ -58,7 +58,6 @@ const placeOrderStripe = async (req, res) => {
     const newOrder = new orderModel(orderData);
     await newOrder.save();
 
-    // res.redirect(303, session.url);
     res.json({
       success: true,
       session_url: session.url,
