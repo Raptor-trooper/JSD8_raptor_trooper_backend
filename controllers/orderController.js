@@ -49,7 +49,7 @@ const placeOrderStripe = async (req, res) => {
       items,
       delivery,
       amount,
-      status: session.status,
+      status: "Order Placed",
       paymentMethod: "Stripe",
       payment: false,
       date: Date.now(),
