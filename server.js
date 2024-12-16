@@ -24,6 +24,7 @@ app.use(express.json());
 const allowedOrigins = [
   "https://jsd-8-raptor-trooper-website.vercel.app",
   "http://localhost:5173",
+  "http://localhost:5174",
 ];
 app.use(
   cors({
