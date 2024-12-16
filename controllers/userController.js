@@ -61,11 +61,45 @@ const register = async (req, res) => {
 
     await newUser.save();
     // const token = createToken(user._id);
-    res.json({ success: true, newUser });
+    res.json({ success: true, newUser: { name: newUser.name } });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
 };
 
-export { login, register };
+// Route for get user profile
+const getProfile = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.body.userId);
+    res.json({
+      success: true,
+      user: {
+        id: req.body.userId,
+        name: user.name,
+        email: user.email,
+        delivery: user.delivery,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+// Route for update user profile
+const updateProfile = async (req, res) => {
+  try {
+    const { userId, delivery } = req.body;
+
+    await userModel.findByIdAndUpdate(userId, { delivery });
+    res.json({
+      success: true,
+      message: "User Delivey is Updated",
+      delivery,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+export { login, register, getProfile, updateProfile };

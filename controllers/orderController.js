@@ -12,21 +12,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // Placing orders using Stripe Method
 const placeOrderStripe = async (req, res) => {
   try {
-    const { userId, items, amount, address } = req.body;
-    const { origin } = req.headers;
-
-    const orderData = {
-      userId,
-      items,
-      address,
-      amount,
-      paymentMethod: "Stripe",
-      payment: false,
-      date: Date.now(),
-    };
-
-    const newOrder = new orderModel(orderData);
-    await newOrder.save();
+    const { userId, items, amount, delivery } = req.body;
+    const url = "http://localhost:5173";
 
     const line_items = items.map((item) => ({
       price_data: {
@@ -51,13 +38,32 @@ const placeOrderStripe = async (req, res) => {
     });
 
     const session = await stripe.checkout.sessions.create({
-      success_url: `${origin}/verify?success=true&orderId=${newOrder._id}`,
-      cancel_url: `${origin}/verify?success=false&orderId=${newOrder._id}`,
       line_items,
+      success_url: `${url}/verify?success=true`,
+      cancel_url: `${url}/verify?success=false`,
       mode: "payment",
     });
 
-    res.json({ success: true, session_url: session.url });
+    const orderData = {
+      userId,
+      items,
+      delivery,
+      amount,
+      status: session.status,
+      paymentMethod: "Stripe",
+      payment: false,
+      date: Date.now(),
+    };
+
+    const newOrder = new orderModel(orderData);
+    await newOrder.save();
+
+    // res.redirect(303, session.url);
+    res.json({
+      success: true,
+      session_url: session.url,
+      orderId: newOrder._id,
+    });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
