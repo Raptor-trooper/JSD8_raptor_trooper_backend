@@ -100,7 +100,7 @@ const getUserCart = async (req, res) => {
 };
 
 export { addToCart, updateCart, getUserCart };
-=======
+
 import userModel from "../models/userModel.js";
 
 // add products to user cart
