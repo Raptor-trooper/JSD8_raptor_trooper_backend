@@ -25,7 +25,9 @@ const adminAuth = async (req, res, next) => {
         message: "Unauthorized: User is not an Admin"
       })
     }
+
     req.body.userId = decoded.userId;
+    req.body.role = decoded.role;
     next();
   } catch (err) {
     console.log(err);

@@ -79,4 +79,14 @@ const singleProduct = async (req, res) => {
   }
 };
 
-export { listProducts, addProduct, removeProduct, singleProduct };
+const checkRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    console.log('role', role)
+    res.json({ success: true, role });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+export { listProducts, addProduct, removeProduct, singleProduct, checkRole };
