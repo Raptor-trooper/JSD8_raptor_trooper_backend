@@ -19,6 +19,7 @@ const placeOrderStripe = async (req, res) => {
       price_data: {
         currency: currency,
         product_data: {
+          images: item.image,
           name: item.name,
         },
         unit_amount: item.price * 100,
