@@ -10,9 +10,6 @@ import productRouter from "./routes/productRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 
-// import swaggerUi from "swagger-ui-express";
-// import swaggerFile from './swagger-output.json' with { type: 'json' };
-
 const app = express();
 const port = 4000;
 
@@ -24,6 +21,7 @@ app.use(express.json());
 const allowedOrigins = [
   "https://jsd-8-raptor-trooper-website.vercel.app",
   "http://localhost:5173",
+  "http://localhost:5174",
 ];
 app.use(
   cors({

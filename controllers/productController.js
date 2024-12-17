@@ -4,7 +4,7 @@ import productModel from "../models/productModel.js";
 // function for add product
 const addProduct = async (req, res) => {
   try {
-    const { name, description, price, category } = req.body;
+    const { name, description, price, category, bestseller } = req.body;
 
     const image1 = req.files.image1 && req.files.image1[0];
     const image2 = req.files.image2 && req.files.image2[0];
@@ -30,6 +30,7 @@ const addProduct = async (req, res) => {
       category,
       price: Number(price),
       image: imagesUrl,
+      bestseller: bestseller === "true" ? true : false,
       date: Date.now(),
     };
 
@@ -57,7 +58,8 @@ const listProducts = async (req, res) => {
 // function for removing product
 const removeProduct = async (req, res) => {
   try {
-    await productModel.findByIdAndDelete(req.body.id);
+    const { id } = req.body;
+    await productModel.findByIdAndDelete(id);
     res.json({ success: true, message: "Product Removed" });
   } catch (error) {
     console.log(error);
